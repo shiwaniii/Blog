@@ -6,7 +6,7 @@ body {
     font-family: "Lobster";
   }
   .page-header {
-    background-color: #27a0dc;
+    background-color: rgb(173, 205, 230);
     margin-top: 0;
     padding: 20px 20px 20px 40px;
   }
