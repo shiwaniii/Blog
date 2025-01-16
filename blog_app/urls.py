@@ -8,3 +8,7 @@ urlpatterns = [
     path('draft-detail/<int:pk>/', views.draft_detail, name='draft-detail'),
 ]
 
+
+
+
+
