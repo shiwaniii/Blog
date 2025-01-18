@@ -23,3 +23,6 @@ def draft_detail(request, pk):
     post = Post.objects.get(id=pk,published_at__isnull=True).order_by("-published_at") #Show only publish data
     return render(request, "about.html", {"post": post})
 
+
+
+
