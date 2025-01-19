@@ -6,30 +6,25 @@ from django.utils import timezone
 from blog_app.forms import PostForm
 from blog_app.models import Post
 
-from django.contrib.auth.decorators import login_required
-
-#function-based views
-
-# Create your views here.
-
-def post_detail(request, pk):
-    post = Post.objects.get(pk=pk, published_at__isnull=False)
-    return render(request, "post_detail.html", {"post": post})
-
-
+@login_required
 def post_list(request):
-    post = Post.objects.filter(published_at__isnull=False).order_by("-published_at") #Show only publish data
-    return render(request, "post_list.html", {"post":   post})
+    posts = Post.objects.filter(published_at__isnull=False).order_by("-published_at")
+    return render(request, "post_list.html", {"posts": posts})
 
 @login_required
-def draft_list(request, pk):
-    post = Post.objects.filter(id=pk, published_at__isnull=True)
-    return render(request, "post_detail.html", {"post": post})
+def post_detail(request, pk):   
+    posts = Post.objects.get(pk=pk, published_at__isnull=False)
+    return render(request, "post_detail.html", {"posts": posts})
+
+@login_required
+def post_draft(request, pk):
+    posts = Post.objects.get(pk=pk, published_at__isnull=True)
+    return render(request, "draft_list.html", {"posts": posts})
 
 @login_required
 def draft_detail(request, pk):
-    post = Post.objects.get(id=pk,published_at__isnull=True).order_by("-published_at") #Show only publish data
-    return render(request, "about.html", {"post": post})
+    posts = Post.objects.get(pk=pk, published_at__isnull=True)
+    return render(request, "draft_detail.html", {"posts": posts})
 
 @login_required
 def post_create(request):
@@ -55,7 +50,6 @@ def post_create(request):
                 {"form": form},
             )
 
-
 @login_required
 def post_update(request, pk):
     post = Post.objects.get(pk=pk)
@@ -80,9 +74,6 @@ def post_delete(request, pk):
     post = Post.objects.get(pk=pk)
     post.delete()
     return redirect("post-list")
-
-from django.utils import timezone
-
 
 @login_required
 def draft_publish(request, pk):
