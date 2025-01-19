@@ -4,7 +4,7 @@ from blog_app.forms import PostForm
 
 from django.contrib.auth.decorators import login_required
 
-
+#function-based views
 
 # Create your views here.
 
@@ -75,4 +75,14 @@ def post_update(request, pk):
 def post_delete(request, pk):
     post = Post.objects.get(pk=pk)
     post.delete()
+    return redirect("post-list")
+
+from django.utils import timezone
+
+
+@login_required
+def draft_publish(request, pk):
+    post = Post.objects.get(pk=pk, published_at__isnull=True)
+    post.published_at = timezone.now()
+    post.save()
     return redirect("post-list")
