@@ -1,6 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from blog_app.models import Post
+from blog_app.models import PostForm
 from django.contrib.auth.decorators import login_required
+
+
 
 # Create your views here.
 
@@ -11,7 +14,7 @@ def post_detail(request, pk):
 
 def post_list(request):
     post = Post.objects.filter(published_at__isnull=False).order_by("-published_at") #Show only publish data
-    return render(request, "post_list.html", {"post": post})
+    return render(request, "post_list.html", {"post":   post})
 
 @login_required
 def draft_list(request, pk):
