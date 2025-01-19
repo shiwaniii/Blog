@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from blog_app.models import Post
-from blog_app.models import PostForm
+
 from django.contrib.auth.decorators import login_required
 
 
@@ -36,7 +36,7 @@ def post_create(request):
             {"form": form},
         )
     else:
-        form = PostForm(request.POST)
+        form = PostForm(request.POST, request.FILES)
 
         if form.is_valid():
             post = form.save(commit=False)
@@ -51,4 +51,21 @@ def post_create(request):
             )
 
 
+@login_required
+def post_update(request, pk):
+    post = Post.objects.get(pk=pk)
+    form = PostForm(instance=post)
+    if request.method == "POST":
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid():
+            post = form.save()
+            if post.published_at:
+                return redirect("post-detail", post.pk)
+            else:
+                return redirect("draft-detail", post.pk)
 
+    return render(
+        request,
+        "post_create.html",
+        {"form": form},
+    )
