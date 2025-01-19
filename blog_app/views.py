@@ -23,6 +23,29 @@ def draft_detail(request, pk):
     post = Post.objects.get(id=pk,published_at__isnull=True).order_by("-published_at") #Show only publish data
     return render(request, "about.html", {"post": post})
 
+@login_required
+def post_create(request):
+    if request.method == "GET":
+        form = PostForm()
+        return render(
+            request,
+            "post_create.html",
+            {"form": form},
+        )
+    else:
+        form = PostForm(request.POST)
+
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user  # logged in user will be the author
+            post.save()
+            return redirect("draft-detail", pk=post.pk)
+        else:
+            return render(
+                request,
+                "post_create.html",
+                {"form": form},
+            )
 
 
 
