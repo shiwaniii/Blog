@@ -5,7 +5,7 @@ from django.utils import timezone
 
 from blog_app.forms import PostForm
 from blog_app.models import Post
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 
@@ -67,6 +67,14 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
         return reverse_lazy("post-detail", kwargs={"pk": post.pk})
      else:
         return reverse_lazy("draft-detail", kwargs={"pk": post.pk})
+     
+
+class PostDeleteView(LoginRequiredMixin, View):
+   def get(self, request, pk):
+      post = Post.objects.get(pk=pk)
+      post.delete()
+      return redirect("post-list")
+   
     
 
 
