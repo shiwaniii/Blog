@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.timezone import now
 
 
 CHOICES = [
@@ -18,5 +19,21 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+    def publish(self):
+        """
+        Mark the post as active and set the published date.
+        """
+        self.status = "active"
+        self.published_at = now()
+        self.save()
+    def deactivate(self):
+        """
+        Mark the post as inactive.
+        """
+        self.status = "inactive"
+        self.save()
+
+    class Meta:
+        ordering = ["-created_at"]
     
  

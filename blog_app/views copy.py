@@ -5,38 +5,6 @@ from django.utils import timezone
 
 from blog_app.forms import PostForm
 from blog_app.models import Post
-from django.views.generic import ListView, DetailView
-from django.contrib.auth.mixins import LoginRequiredMixin
-
-class PostListView(ListView):
-    model = Post
-    template_name = 'post_list.html'
-    context_object_name = "posts"
-
-    def get_queryset(self):
-     posts = Post.objects.filter(published_at__isnull=False).order_by("-id")
-     return posts
-    
-class PostDetailView(DetailView):
-    model = Post
-    template_name = 'post_detail.html'
-    context_object_name = "posts"
-
-    def get_queryset(self):
-     queryset = Post.objects.filter(pk=self.kwargs["pk"], published_at__isnull=False)
-     return queryset
-    
-class DraftListView(LoginRequiredMixin, ListView):
-    model = Post
-    template_name = 'draft_list.html'
-    context_object_name = "posts"
-
-    def get_queryset(self):
-     queryset = Post.objects.filter(published_at__isnull=True)
-     return queryset
-
-    
-
 
 @login_required
 def post_list(request):
