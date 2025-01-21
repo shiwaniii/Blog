@@ -81,3 +81,20 @@ def draft_publish(request, pk):
     post.published_at = timezone.now()
     post.save()
     return redirect("post-list")
+
+
+#For Customization
+
+class PostCreateView(View):
+    def get(self, request):
+        form = PostForm()
+        return render(request, "post_create.html", {"form": form},)
+    
+    # def post(self, request):
+    #     form = PostForm(request.POST, request.FILES)
+
+    #     if form.is_valid():
+    #         post = form.save(commit=False)
+    #         post.author = request.user
+    #         post.save()
+            
